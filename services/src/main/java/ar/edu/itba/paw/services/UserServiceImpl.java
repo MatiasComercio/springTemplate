@@ -21,4 +21,9 @@ public class UserServiceImpl implements UserService {
 	public User getByUsername(final String username) {
 		return userDao.getByUsername(username);
 	}
+
+	/* Test purpose only */
+	/* default */ void setUserDao(final UserDao userDao) {
+		this.userDao = userDao;
+	}
 }
