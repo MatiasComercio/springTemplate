@@ -14,14 +14,27 @@
   <packaging>pom</packaging>
   <name>paw</name>
     <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
 	  <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
 	  <org.springframework.version>4.2.5.RELEASE</org.springframework.version>
 	  <servlet-api.version>2.5</servlet-api.version>
       <jstl.version>1.2</jstl.version>
       <org.hsqldb.version>2.3.1</org.hsqldb.version>
+      <junit.version>4.12</junit.version>
+      <mockito.version>1.10.19</mockito.version>
 	</properties>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-eclipse-plugin</artifactId>
@@ -60,6 +73,18 @@
         <groupId>org.hsqldb</groupId>
         <artifactId>hsqldb</artifactId>
         <version>${org.hsqldb.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-all</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
