@@ -10,4 +10,12 @@ public interface UserDao {
 	 * @return The created user
 	 */
 	User create(String username, String password);
+
+	/**
+	 * Gets a user with the given username.
+	 * If no user exists with that username, null is returned.
+	 * @param username The user's username
+	 * @return The user with the given username, if exists; null otherwise.
+	 */
+	User getByUsername(String username);
 }
