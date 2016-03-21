@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class UserDaoJdbc implements UserDao {
+public class UserDaoJdbc implements UserDao { /* TODO: Change for UserJdbcDao */
 
 	private static final String TABLE_NAME = "users";
 	private static final String USERNAME_COLUMN = "username";
@@ -32,25 +32,32 @@ public class UserDaoJdbc implements UserDao {
 		this.userRowMapper = new UserRowMapper();
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 		/* TODO: export table name as a private final String */
-		this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME);
+		this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns("userId");
 
 		/* TODO: export table creation as a private final String */
-		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (username varchar (100), password varchar (100))");
+		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (" +
+				"userId integer IDENTITY PRIMARY KEY, " +
+				"username varchar (100), " +
+				"password varchar (100))");
 	}
 
 	public User create(final String username, final String password) {
 		final Map<String, Object> args = new HashMap<>();
 		args.put(USERNAME_COLUMN, username);
 		args.put(PASSWORD_COLUMN, password);
+		final Number key = jdbcInsert.executeAndReturnKey(args);
 
 		jdbcInsert.execute(args);
 
-		return new User(username, password);
+		return new User(key.intValue(), username, password);
 	}
 
 	@Override
 	public User getByUsername(final String username) {
-		List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE username = ? LIMIT 1", userRowMapper, username);
+		List<User> users = jdbcTemplate.query(
+						"SELECT * " +
+						"FROM users " +
+						"WHERE username = ? LIMIT 1", userRowMapper, username);
 
 		return users.isEmpty() ? null : users.get(0);
 	}
@@ -58,7 +65,7 @@ public class UserDaoJdbc implements UserDao {
 	private static class UserRowMapper implements RowMapper<User> {
 		@Override
 		public User mapRow(final ResultSet resultSet, final int rowNumber) throws SQLException {
-			return new User(resultSet.getString(USERNAME_COLUMN), resultSet.getString(PASSWORD_COLUMN));
+			return new User(resultSet.getInt("userId"), resultSet.getString(USERNAME_COLUMN), resultSet.getString(PASSWORD_COLUMN));
 		}
 	}
 }
