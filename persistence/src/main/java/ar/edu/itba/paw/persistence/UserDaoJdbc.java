@@ -22,14 +22,16 @@ public class UserDaoJdbc implements UserDao { /* TODO: Change for UserJdbcDao */
 	private static final String USERNAME_COLUMN = "username";
 	private static final String PASSWORD_COLUMN = "password";
 
-	private final UserRowMapper userRowMapper;
 	private final JdbcTemplate jdbcTemplate;
 	private final SimpleJdbcInsert jdbcInsert;
 
+	/* Estoy creando una funcion anonima */
+	private final RowMapper<User> userRowMapper = (resultSet, rowNum) -> {
+		return new User(resultSet.getInt("userId"), resultSet.getString(USERNAME_COLUMN), resultSet.getString(PASSWORD_COLUMN));
+	};
+
 	@Autowired
 	public UserDaoJdbc(final DataSource dataSource) {
-
-		this.userRowMapper = new UserRowMapper();
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 		/* TODO: export table name as a private final String */
 		this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns("userId");
@@ -60,12 +62,5 @@ public class UserDaoJdbc implements UserDao { /* TODO: Change for UserJdbcDao */
 						"WHERE username = ? LIMIT 1", userRowMapper, username);
 
 		return users.isEmpty() ? null : users.get(0);
-	}
-
-	private static class UserRowMapper implements RowMapper<User> {
-		@Override
-		public User mapRow(final ResultSet resultSet, final int rowNumber) throws SQLException {
-			return new User(resultSet.getInt("userId"), resultSet.getString(USERNAME_COLUMN), resultSet.getString(PASSWORD_COLUMN));
-		}
 	}
 }
