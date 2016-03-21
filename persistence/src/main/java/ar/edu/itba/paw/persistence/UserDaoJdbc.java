@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.interfaces.CourseDao;
 import ar.edu.itba.paw.interfaces.UserDao;
+import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,14 +29,16 @@ public class UserDaoJdbc implements UserDao { /* TODO: Change for UserJdbcDao */
 	private final JdbcTemplate jdbcTemplate;
 	private final SimpleJdbcInsert jdbcInsert;
 
-	@Autowired
-	public UserDaoJdbc(final DataSource dataSource) {
+	private final CourseDao courseDao;
 
-		this.userRowMapper = new UserRowMapper();
+	@Autowired
+	public UserDaoJdbc(final DataSource dataSource, final CourseDao courseDao) {
+
+		this.userRowMapper = new UserRowMapper(courseDao);
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 		/* TODO: export table name as a private final String */
 		this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns("userId");
-
+		this.courseDao = courseDao;
 		/* TODO: export table creation as a private final String */
 		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (" +
 				"userId integer IDENTITY PRIMARY KEY, " +
@@ -46,10 +51,10 @@ public class UserDaoJdbc implements UserDao { /* TODO: Change for UserJdbcDao */
 		args.put(USERNAME_COLUMN, username);
 		args.put(PASSWORD_COLUMN, password);
 		final Number key = jdbcInsert.executeAndReturnKey(args);
+		final int id = key.intValue();
+//TODO:		jdbcInsert.execute(args);
 
-		jdbcInsert.execute(args);
-
-		return new User(key.intValue(), username, password);
+		return new User(id, username, password, Collections.<Course>emptyList());
 	}
 
 	@Override
@@ -63,9 +68,18 @@ public class UserDaoJdbc implements UserDao { /* TODO: Change for UserJdbcDao */
 	}
 
 	private static class UserRowMapper implements RowMapper<User> {
+
+		private final CourseDao courseDao;
+
+		public UserRowMapper(final CourseDao courseDao) {
+			this.courseDao = courseDao;
+		}
+
 		@Override
 		public User mapRow(final ResultSet resultSet, final int rowNumber) throws SQLException {
-			return new User(resultSet.getInt("userId"), resultSet.getString(USERNAME_COLUMN), resultSet.getString(PASSWORD_COLUMN));
+			final int id = resultSet.getInt("userId");
+			final List<Course> courses = courseDao.getByUser(id);
+			return new User(id, resultSet.getString(USERNAME_COLUMN), resultSet.getString(PASSWORD_COLUMN), courses);
 		}
 	}
 }
