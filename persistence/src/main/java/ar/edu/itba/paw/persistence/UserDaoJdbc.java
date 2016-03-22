@@ -36,11 +36,11 @@ public class UserDaoJdbc implements UserDao { /* TODO: Change for UserJdbcDao */
 		/* TODO: export table name as a private final String */
 		this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns("userId");
 
-		/* TODO: export table creation as a private final String */
+/*		*//* TODO: export table creation as a private final String *//*
 		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (" +
-				"userId integer IDENTITY PRIMARY KEY, " +
+				"userId integer SERIAL PRIMARY KEY, " +
 				"username varchar (100), " +
-				"password varchar (100))");
+				"password varchar (100))");*/
 	}
 
 	public User create(final String username, final String password) {
