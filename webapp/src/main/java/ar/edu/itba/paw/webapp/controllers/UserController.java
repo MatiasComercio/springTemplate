@@ -16,7 +16,6 @@ public class UserController {
 
 	@RequestMapping("/")
 	public ModelAndView index() {
-		System.out.println("index...");
 		final ModelAndView mav = new ModelAndView("index");
 		mav.addObject("user", us.register("juan", "12345"));
 		return mav;
@@ -24,7 +23,6 @@ public class UserController {
 
 	@RequestMapping("/users/{username}")
 	public ModelAndView getUser(@PathVariable final String username) {
-		System.out.println("getUser...");
 		final ModelAndView mav = new ModelAndView("user");
 		mav.addObject("user", us.getByUsername(username));
 		return mav;
