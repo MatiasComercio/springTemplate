@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -23,8 +24,9 @@ import static org.junit.Assert.assertNotNull;
 @Sql("/schema.sql")
 public class UserDaoJdbcTest {
 
-	private static final String PASSWORD = "Password";
-	private static final String USERNAME = "Username";
+	private static final String TABLE_NAME = "users";
+	private static final String USERNAME_COLUMN = "username";
+	private static final String PASSWORD_COLUMN = "password";
 
 	@Autowired
 	private DataSource dataSource;
@@ -37,20 +39,20 @@ public class UserDaoJdbcTest {
 	@Before
 	public void setUp() {
 		jdbcTemplate = new JdbcTemplate(dataSource);
-		/* Si comento esto --> deberia fallar */
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
+		 /* Si comento esto --> deberia fallar */
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, TABLE_NAME);
 	}
 
 	@Repeat(10)
 	@Test
 	public void testCreate() {
-		final User user = userDaoJdbc.create(USERNAME, PASSWORD);
+		final User user = userDaoJdbc.create(USERNAME_COLUMN, PASSWORD_COLUMN);
 
 		assertNotNull(user);
-		assertEquals(USERNAME, user.getUsername());
-		assertEquals(PASSWORD, user.getPassword());
+		assertEquals(USERNAME_COLUMN, user.getUsername());
+		assertEquals(PASSWORD_COLUMN, user.getPassword());
 
-		assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "users"));
+		assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, TABLE_NAME));
 	}
 
 
