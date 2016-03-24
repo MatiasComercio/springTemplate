@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS users (
-				userId integer IDENTITY PRIMARY KEY,
-				username varchar (100),
-				password varchar (100)
-)
+				userid SERIAL PRIMARY KEY,
+				username VARCHAR (100),
+				password VARCHAR (100)
+);
