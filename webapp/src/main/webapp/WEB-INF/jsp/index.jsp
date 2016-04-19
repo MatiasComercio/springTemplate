@@ -15,6 +15,7 @@
 <body>
 
 <h1>Creating user: ${user.username}</h1>
+<h1>User id in session ${userId}</h1>
 
 </body>
 </html>
