@@ -1,14 +1,17 @@
 package ar.edu.itba.paw.webapp.controllers;
 
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.forms.LoginForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.UserService;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 public class UserController {
@@ -34,7 +37,7 @@ public class UserController {
 	}
 
 	@RequestMapping("/login")
-	public ModelAndView login() {
+	public ModelAndView login(@ModelAttribute("loginForm") final LoginForm loginForm) {
 		return new ModelAndView("login");
 	}
 
@@ -46,13 +49,18 @@ public class UserController {
 
 
 	@RequestMapping(value = "/login" , method = {RequestMethod.POST})
-	public ModelAndView login(@RequestParam("username") final String username,
-	                          @RequestParam("password") final String password,
+	public ModelAndView login(@Valid @ModelAttribute("loginForm") final LoginForm loginForm,
+								final BindingResult errors,
 								final HttpSession session) {
-		final User user = us.getByUsername(username);
+		final User user = us.getByUsername(loginForm.getUsername());
+
+		if (errors.hasErrors()) {
+			/*return new ModelAndView("redirect:/login");*/ /*+++xcheck: not working: ModelAttribute is being completely re-instantiated, not shared */
+			return login(loginForm);/*This worked*/
+		}
 
 		final ModelAndView mav;
-		if (user != null && user.getPassword().equals(password)) {
+		if (user != null && user.getPassword().equals(loginForm.getPassword())) {
 			session.setAttribute(LOGGED_USER_ID, user.getId());
 			mav = new ModelAndView("index");
 			mav.addObject("user", user);

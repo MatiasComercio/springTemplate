@@ -6,23 +6,26 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <title>login</title>
 </head>
 <body>
-<form action="/login" method="post" enctype="application/x-www-form-urlencoded">
+<form:form modelAttribute="loginForm" action="/login" method="post" enctype="application/x-www-form-urlencoded">
     <div>
-        <label for="username">Username</label>
-        <input id="username" name="username" type="text"/>
+        <form:label path="username">Username</form:label>
+        <form:input path="username" type="text"/>
+        <form:errors path="username" cssStyle="color: red;"/>
     </div>
     <div>
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password"/>
+        <form:label path="password">Password</form:label>
+        <form:input path="password" type="password"/>
+        <form:errors path="password" cssStyle="color: red;"/>
     </div>
     <div>
         <input type="submit" value="Login"/>
     </div>
-</form>
+</form:form>
 </body>
 </html>
