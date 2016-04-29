@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.webapp.auth.PawAuthenticationProvider;
+import ar.edu.itba.paw.webapp.auth.PawAuthenticationSuccessHandler;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,7 +10,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -47,6 +54,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private PawUserDetailsService userDetailsService;
 
+	@Autowired
+	private PawAuthenticationSuccessHandler authSuccessHandler;
+
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
 		http.authenticationProvider(authProvider)
@@ -62,7 +72,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 				.and().formLogin()
 				.usernameParameter("username")
 				.passwordParameter("password")
-				.defaultSuccessUrl("/", false)
+//				.defaultSuccessUrl("/", false)
+				.successHandler(authSuccessHandler)
 				.failureUrl("/login?error")
 				.loginPage("/login")
 				.loginProcessingUrl("/login")
