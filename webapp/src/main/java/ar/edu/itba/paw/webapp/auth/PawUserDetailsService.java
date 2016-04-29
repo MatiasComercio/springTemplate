@@ -3,8 +3,11 @@ package ar.edu.itba.paw.webapp.auth;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,8 +26,15 @@ public class PawUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
 		final User user = us.getByUsername(username);
 		if (user != null) {
-			final Collection<GrantedAuthority> authorities = new HashSet<>();
-			authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN")); /* +++xchange: estamos cableandole el rol; esto deberiamos levantarlo tambien de los datos del usuario de la base de datos */
+//			final Collection<GrantedAuthority> authorities = new HashSet<>();
+//			authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN")); /* +++xchange: estamos cableandole el rol; esto deberiamos levantarlo tambien de los datos del usuario de la base de datos */
+			final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			final Collection<? extends GrantedAuthority> authorities;
+			if (authentication != null) {
+				authorities = authentication.getAuthorities();
+			} else {
+				authorities = new HashSet<>();
+			}
 			return new org.springframework.security.core.userdetails.User(user.getUsername(), user.	getPassword(), true, true , true, true, authorities);
 		}
 
