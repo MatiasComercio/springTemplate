@@ -49,8 +49,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
-		http.authenticationProvider(null)
-				.userDetailsService(null)
+		http.authenticationProvider(authProvider)
+				.userDetailsService(userDetailsService)
 				.sessionManagement()
 				.invalidSessionUrl("/login")
 
@@ -60,15 +60,15 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/**").authenticated()
 
 				.and().formLogin()
-				.usernameParameter("j_username")
-				.passwordParameter("j_password")
+				.usernameParameter("username")
+				.passwordParameter("password")
 				.defaultSuccessUrl("/", false)
 				.failureUrl("/login?error")
 				.loginPage("/login")
 				.loginProcessingUrl("/login")
 
 				.and().rememberMe()
-				.rememberMeParameter("j_rememberme")
+				.rememberMeParameter("rememberme")
 				.userDetailsService(userDetailsService)
 				.key(KEY)
 				.tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))

@@ -24,7 +24,7 @@ public class PawUserDetailsService implements UserDetailsService {
 		final User user = us.getByUsername(username);
 		if (user != null) {
 			final Collection<GrantedAuthority> authorities = new HashSet<>();
-			authorities.add(new SimpleGrantedAuthority("ROLE_USER")); /* +++xchange: estamos cableandole el rol; esto deberiamos levantarlo tambien de los datos del usuario de la base de datos */
+			authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN")); /* +++xchange: estamos cableandole el rol; esto deberiamos levantarlo tambien de los datos del usuario de la base de datos */
 			return new org.springframework.security.core.userdetails.User(user.getUsername(), user.	getPassword(), true, true , true, true, authorities);
 		}
 

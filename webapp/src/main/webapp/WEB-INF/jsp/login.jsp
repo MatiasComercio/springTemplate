@@ -1,14 +1,38 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <title>login</title>
 </head>
 <body>
+
+<%--<c:url value="/login" var="loginUrl" />
+<form modelAttribute="loginForm" action="${loginUrl}" method="post" enctype="application/x-www-form-urlencoded">
+    <div>
+        <label for="username">Username</label>
+        <input id="username" type="text"/>
+    </div>
+    <div>
+        <label for="password">Password</label>
+        <input id="password" type="password"/>
+    </div>
+    <div>
+        <label input name="j_rememberme" type="checkbox">
+            <spring:message code="rember_me" />
+        </label>
+        <div>
+            <input type="submit" value="Login"/>
+        </div>
+    </div>
+</form>
+</body>
+</html>--%>
+
 <%-- Copied from WebAuthConfig -> configure(http) -> loginPage --%>
 <c:url value="/login" var="loginProcessingUrl"/>
-<form action="${loginProcessingUrl}" method="post">
+<form modelAttribute="loginForm" action="${loginProcessingUrl}" method="post" enctype="application/x-www-form-urlencoded">
     <fieldset>
         <legend>Please Login</legend>
         <!-- use param.error assuming FormLoginConfigurer#failureUrl contains the query parameter error -->
@@ -37,7 +61,7 @@
         <!-- if using RememberMeConfigurer make sure remember-me matches RememberMeConfigurer#rememberMeParameter -->
         <p>
             <label for="remember-me">Remember Me?</label>
-            <input type="checkbox" id="remember-me" name="remember-me"/>
+            <input type="checkbox" id="remember-me" name="rememberme"/>
         </p>
         <div>
             <button type="submit" class="btn">Log in</button>
