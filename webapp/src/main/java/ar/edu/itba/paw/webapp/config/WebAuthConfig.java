@@ -34,7 +34,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
 				.and().authorizeRequests()
 				.antMatchers("/login/**").anonymous()
-				.antMatchers("/admin/**").hasRole("ROLE_ADMIN")
+				.antMatchers("/admin/**").hasRole("ADMIN")
 				.antMatchers("/**").authenticated()
 
 				.and().formLogin()
@@ -42,9 +42,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 				.passwordParameter("j_password")
 				.defaultSuccessUrl("/", false)
 				.loginPage("/login")
+				.loginProcessingUrl("/login")
 
-				.and().rememberMe().
-				tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
+				.and().rememberMe()
+				.rememberMeParameter("j_rememberme")
+				.tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
 
 				.and().logout()
 				.logoutUrl("/logout")

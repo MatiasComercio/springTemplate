@@ -14,20 +14,23 @@
   <packaging>pom</packaging>
   <name>paw</name>
   <properties>
-      <maven.compiler.source>1.8</maven.compiler.source>
-      <maven.compiler.target>1.8</maven.compiler.target>
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	  <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
-	  <org.springframework.version>4.2.5.RELEASE</org.springframework.version>
-      <spring.security.version>4.0.4.RELEASE</spring.security.version>
-	  <servlet-api.version>2.5</servlet-api.version>
-      <jstl.version>1.2</jstl.version>
-      <org.hsqldb.version>2.3.1</org.hsqldb.version>
-      <junit.version>4.12</junit.version>
-      <mockito.version>1.10.19</mockito.version>
-      <org.postgresql>9.3-1102-jdbc41</org.postgresql>
-      <javax-validation-api.version>1.1.0.Final</javax-validation-api.version>
-      <hibernate-validator.version>5.2.4.Final</hibernate-validator.version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
+    <org.springframework.version>4.2.5.RELEASE</org.springframework.version>
+    <spring.security.version>4.0.4.RELEASE</spring.security.version>
+    <servlet-api.version>2.5</servlet-api.version>
+    <org.slf4j.version>1.7.21</org.slf4j.version>
+    <ch.qos.logback.version>1.1.7</ch.qos.logback.version>
+    <org.logback.extensions.version>0.1.4</org.logback.extensions.version>
+    <jstl.version>1.2</jstl.version>
+    <org.hsqldb.version>2.3.1</org.hsqldb.version>
+    <junit.version>4.12</junit.version>
+    <mockito.version>1.10.19</mockito.version>
+    <org.postgresql>9.3-1102-jdbc41</org.postgresql>
+    <javax-validation-api.version>1.1.0.Final</javax-validation-api.version>
+    <hibernate-validator.version>5.2.4.Final</hibernate-validator.version>
   </properties>
   <build>
     <plugins>
@@ -87,6 +90,32 @@
         <version>${spring.security.version}</version>
       </dependency>
       <!-- /Spring Security -->
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${org.slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl-over-slf4j</artifactId>
+        <version>${org.slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${ch.qos.logback.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-core</artifactId>
+        <version>${ch.qos.logback.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.logback-extensions</groupId>
+        <artifactId>logback-ext-spring</artifactId>
+        <version>${org.logback.extensions.version}</version>
+        <scope>runtime</scope>
+      </dependency>
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>

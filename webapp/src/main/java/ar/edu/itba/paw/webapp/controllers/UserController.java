@@ -21,6 +21,11 @@ public class UserController {
 	@Autowired
 	private UserService us;
 
+	@RequestMapping("/403")
+	public ModelAndView AccessDenied() {
+		return new ModelAndView("403");
+	}
+
 	@RequestMapping("/")
 	public ModelAndView index(final HttpSession session) {
 		final ModelAndView mav = new ModelAndView("index");
@@ -41,34 +46,34 @@ public class UserController {
 		return new ModelAndView("login");
 	}
 
-	/* No puedo pedirle parametros del request, pero si cosas generales */
-	@ModelAttribute("userId")
-	public Integer loggedUser(final HttpSession session) {
-		return (Integer) session.getAttribute(LOGGED_USER_ID);
-	}
+//	/* No puedo pedirle parametros del request, pero si cosas generales */
+//	@ModelAttribute("userId")
+//	public Integer loggedUser(final HttpSession session) {
+//		return (Integer) session.getAttribute(LOGGED_USER_ID);
+//	}
 
 
-	@RequestMapping(value = "/login" , method = {RequestMethod.POST})
-	public ModelAndView login(@Valid @ModelAttribute("loginForm") final LoginForm loginForm,
-								final BindingResult errors,
-								final HttpSession session) {
-		final User user = us.getByUsername(loginForm.getUsername());
-
-		if (errors.hasErrors()) {
-			/*return new ModelAndView("redirect:/login");*/ /*+++xcheck: not working: ModelAttribute is being completely re-instantiated, not shared */
-			return login(loginForm);/*This worked*/
-		}
-
-		final ModelAndView mav;
-		if (user != null && user.getPassword().equals(loginForm.getPassword())) {
-			session.setAttribute(LOGGED_USER_ID, user.getId());
-			mav = new ModelAndView("index");
-			mav.addObject("user", user);
-		} else {
-			mav = new ModelAndView("redirect:/login");
-		}
-		return mav;
-	}
+//	@RequestMapping(value = "/login" , method = {RequestMethod.POST})
+//	public ModelAndView login(@Valid @ModelAttribute("loginForm") final LoginForm loginForm,
+//								final BindingResult errors,
+//								final HttpSession session) {
+//		final User user = us.getByUsername(loginForm.getUsername());
+//
+//		if (errors.hasErrors()) {
+//			/*return new ModelAndView("redirect:/login");*/ /*+++xcheck: not working: ModelAttribute is being completely re-instantiated, not shared */
+//			return login(loginForm);/*This worked*/
+//		}
+//
+//		final ModelAndView mav;
+//		if (user != null && user.getPassword().equals(loginForm.getPassword())) {
+//			session.setAttribute(LOGGED_USER_ID, user.getId());
+//			mav = new ModelAndView("index");
+//			mav.addObject("user", user);
+//		} else {
+//			mav = new ModelAndView("redirect:/login");
+//		}
+//		return mav;
+//	}
 
 	@RequestMapping("/users/{username}")
 	public ModelAndView getUser(@PathVariable final String username) {
