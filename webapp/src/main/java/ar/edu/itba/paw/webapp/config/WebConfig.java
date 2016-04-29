@@ -45,7 +45,7 @@ public class WebConfig {
 	public DataSource dataSource() {
 		final SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
 		dataSource.setDriverClass(Driver.class);
-		dataSource.setUrl("jdbc:postgresql://localhost:5432/paw");
+		dataSource.setUrl("jdbc:postgresql://localhost:5432/springTemplate"); /* //localhost:5432/<databaseName> */
 		dataSource.setUsername("paw");
 		dataSource.setPassword("paw01");
 
