@@ -3,6 +3,8 @@ package ar.edu.itba.paw.webapp.controllers;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.forms.LoginForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -46,17 +48,23 @@ public class UserController {
 		return new ModelAndView("login");
 	}
 
+	@ModelAttribute
+	public User loggedUser() {
+		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return us.getByUsername((String) auth.getName()); // >>> 2.30: antes era getPrincipal y daba excepción.
+	}
+
 //	/* No puedo pedirle parametros del request, pero si cosas generales */
 //	@ModelAttribute("userId")
-//	public Integer loggedUser(final HttpSession session) {
-//		return (Integer) session.getAttribute(LOGGED_USER_ID);
+//	public Integer loggedUser(final HttpSession sessionId) {
+//		return (Integer) sessionId.getAttribute(LOGGED_USER_ID);
 //	}
 
 
 //	@RequestMapping(value = "/login" , method = {RequestMethod.POST})
 //	public ModelAndView login(@Valid @ModelAttribute("loginForm") final LoginForm loginForm,
 //								final BindingResult errors,
-//								final HttpSession session) {
+//								final HttpSession sessionId) {
 //		final User user = us.getByUsername(loginForm.getUsername());
 //
 //		if (errors.hasErrors()) {
@@ -66,7 +74,7 @@ public class UserController {
 //
 //		final ModelAndView mav;
 //		if (user != null && user.getPassword().equals(loginForm.getPassword())) {
-//			session.setAttribute(LOGGED_USER_ID, user.getId());
+//			sessionId.setAttribute(LOGGED_USER_ID, user.getId());
 //			mav = new ModelAndView("index");
 //			mav.addObject("user", user);
 //		} else {
