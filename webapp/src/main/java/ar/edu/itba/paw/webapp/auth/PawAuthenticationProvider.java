@@ -28,9 +28,7 @@ public class PawAuthenticationProvider implements AuthenticationProvider {
 		final User user = us.getByUsername(username);
 
 		if (user != null && user.getPassword().equals(password)) {
-			final Collection<GrantedAuthority> authorities = new HashSet<>();
-			authorities.add(new SimpleGrantedAuthority("ROLE_USER")); /* +++xchange: estamos cableandole el rol; esto deberiamos levantarlo tambien de los datos del usuario de la base de datos */
-			return new UsernamePasswordAuthenticationToken(username, password, authorities);
+			return new UsernamePasswordAuthenticationToken(username, password);
 		}
 
 		return null;

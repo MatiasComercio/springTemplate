@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.webapp.auth.PawAuthenticationProvider;
+import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private PawAuthenticationProvider authProvider;
+
+	@Autowired
+	private PawUserDetailsService pawUserDetailsService;
 
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
