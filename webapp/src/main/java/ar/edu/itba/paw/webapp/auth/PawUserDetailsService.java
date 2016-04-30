@@ -26,16 +26,16 @@ public class PawUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
 		final User user = us.getByUsername(username);
 		if (user != null) {
-//			final Collection<GrantedAuthority> authorities = new HashSet<>();
-//			authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN")); /* +++xchange: estamos cableandole el rol; esto deberiamos levantarlo tambien de los datos del usuario de la base de datos */
-			final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			final Collection<? extends GrantedAuthority> authorities;
-			if (authentication != null) {
-				authorities = authentication.getAuthorities();
-			} else {
-				authorities = new HashSet<>();
-			}
-			return new org.springframework.security.core.userdetails.User(user.getUsername(), user.	getPassword(), true, true , true, true, authorities);
+			final Collection<GrantedAuthority> authorities = new HashSet<>();
+			authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN")); /* +++xchange: estamos cableandole el rol; esto deberiamos levantarlo tambien de los datos del usuario de la base de datos */
+//			final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//			final Collection<? extends GrantedAuthority> authorities;
+//			if (authentication != null) {
+//				authorities = authentication.getAuthorities();
+//			} else {
+//				authorities = new HashSet<>();
+//			}
+			return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), true, true , true, true, authorities);
 		}
 
 		throw new UsernameNotFoundException("No user found by " + username);

@@ -48,8 +48,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 			"vUf8FRscFkvo2EbtKPPLQiY6A1yuvrpobCgWj6TOKeujALF6jzdhepsk7sL2Qg1g\n" +
 			"6Nah/Tu9I0VOloJlciQenA==\n";
 
-	@Autowired
-	private PawAuthenticationProvider authProvider;
+//	@Autowired
+//	private PawAuthenticationProvider authProvider;
 
 	@Autowired
 	private PawUserDetailsService userDetailsService;
@@ -59,7 +59,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
-		http.authenticationProvider(authProvider)
+		http
+//				.authenticationProvider(authProvider)
 				.userDetailsService(userDetailsService)
 				.sessionManagement()
 				.invalidSessionUrl("/login")
@@ -72,7 +73,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 				.and().formLogin()
 				.usernameParameter("username")
 				.passwordParameter("password")
-//				.defaultSuccessUrl("/", false)
+				.defaultSuccessUrl("/", false)
 				.successHandler(authSuccessHandler)
 				.failureUrl("/login?error")
 				.loginPage("/login")
@@ -80,13 +81,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
 				.and().rememberMe()
 				.rememberMeParameter("rememberme")
-				.userDetailsService(userDetailsService)
+				.userDetailsService(userDetailsService) /* if commented, when using "Remember me" checkbox: java.lang.IllegalStateException: UserDetailsService is required. */
 				.key(KEY)
 				.tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
 
 				.and().logout()
 				.logoutUrl("/logout")
-				.logoutSuccessUrl("/login?logout")
+				.logoutSuccessUrl("/login?logout") //+++xcheck: this is the default
 
 				.and().exceptionHandling()
 				.accessDeniedPage("/403")
