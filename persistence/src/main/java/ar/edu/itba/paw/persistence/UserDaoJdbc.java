@@ -25,10 +25,16 @@ public class UserDaoJdbc implements UserDao { /* TODO: Change for UserJdbcDao */
 	private final SimpleJdbcInsert jdbcInsert;
 
 	/* Estoy creando una funcion anonima */
-	private final RowMapper<User> userRowMapper = (resultSet, rowNum) ->
-			new User(resultSet.getInt(USER_ID_COLUMN),
-					resultSet.getString(USERNAME_COLUMN),
-					resultSet.getString(PASSWORD_COLUMN));
+	private final RowMapper<User> userRowMapper = (resultSet, rowNum) -> {
+		final User.Builder userBuilder =
+				User
+						.builder(resultSet.getInt(USER_ID_COLUMN),resultSet.getString(USERNAME_COLUMN))
+						.password(resultSet.getString(PASSWORD_COLUMN));
+
+		return userBuilder.build();
+	};
+
+
 
 	@Autowired
 	public UserDaoJdbc(final DataSource dataSource) {
@@ -49,7 +55,10 @@ public class UserDaoJdbc implements UserDao { /* TODO: Change for UserJdbcDao */
 		args.put(PASSWORD_COLUMN, password);
 		final Number key = jdbcInsert.executeAndReturnKey(args);
 
-		return new User(key.intValue(), username, password);
+		final User.Builder userBuilder =
+				User.builder(key.intValue(), username)
+						.password(password);
+		return userBuilder.build();
 	}
 
 	@Override
