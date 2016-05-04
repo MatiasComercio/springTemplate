@@ -41,15 +41,16 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 			"vUf8FRscFkvo2EbtKPPLQiY6A1yuvrpobCgWj6TOKeujALF6jzdhepsk7sL2Qg1g\n" +
 			"6Nah/Tu9I0VOloJlciQenA==\n";
 
-	@Autowired
-	private PawAuthenticationProvider authProvider;
+//	@Autowired
+//	private PawAuthenticationProvider authProvider;
 
 	@Autowired
 	private PawUserDetailsService userDetailsService;
 
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
-		http.authenticationProvider(authProvider)
+		http
+//				.authenticationProvider(authProvider)
 				.userDetailsService(userDetailsService)
 				.sessionManagement()
 				.invalidSessionUrl("/login")
@@ -87,6 +88,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(final WebSecurity web) throws Exception {
 		web.ignoring()
-				.antMatchers("/css/*", "/js/**", "/img/**", "favicon.ico", "/403");
+				.antMatchers("/css/*", "/js/**", "/img/**", "/favicon.ico", "/403");
 	}
 }

@@ -29,10 +29,13 @@ public class UserController {
 	}
 
 	@RequestMapping("/")
-	public ModelAndView index(final HttpSession session) {
+	public ModelAndView index(
+			@ModelAttribute("loggedUser") final User loggedUser,
+			final HttpSession session) {
 		final ModelAndView mav = new ModelAndView("index");
-		mav.addObject("user", us.register("juan", "12345"));
-		mav.addObject("userId", session.getAttribute(LOGGED_USER_ID));
+		us.register("juan", "12345");
+//		mav.addObject("user", us.register("juan", "12345"));
+//		mav.addObject("userId", session.getAttribute(LOGGED_USER_ID));
 		return mav;
 	}
 
@@ -48,10 +51,10 @@ public class UserController {
 		return new ModelAndView("login");
 	}
 
-	@ModelAttribute
+	@ModelAttribute("loggedUser")
 	public User loggedUser() {
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		return us.getByUsername((String) auth.getName()); // >>> 2.30: antes era getPrincipal y daba excepción.
+		return us.getByUsername(auth.getName()); // >>> 2.30: antes era getPrincipal y daba excepción.
 	}
 
 //	/* No puedo pedirle parametros del request, pero si cosas generales */

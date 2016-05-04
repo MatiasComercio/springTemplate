@@ -9,8 +9,8 @@
 <body>
 
 <h1>solo para admins</h1>
-<h1><spring:message code="greeting" arguments="${user}"/></h1>
-<h1><spring:message code="sessionId" arguments="${userId}"/></h1>
+<h1><spring:message code="greeting" arguments="${loggedUser}"/></h1>
+<h1><spring:message code="sessionId" arguments="${loggedUser.id}"/></h1>
 
 </body>
 </html>
