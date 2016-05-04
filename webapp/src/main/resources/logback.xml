@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="defualtPattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
-    <encoder>
-        <pattern>${defaultPattern:-}</pattern>
-    </encoder>
+    <property name="defaultPattern" value="%-4relative %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
 
-    <root level="INFO">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${defaultPattern:-}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="DEBUG">
         <appender-ref ref="STDOUT" />
     </root>
-
 </configuration>

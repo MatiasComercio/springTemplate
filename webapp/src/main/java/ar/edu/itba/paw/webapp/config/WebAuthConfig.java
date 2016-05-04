@@ -47,6 +47,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private PawUserDetailsService userDetailsService;
 
+//	@Autowired
+//	private PawAuthenticationSuccessHandler authSuccessHandler;
+
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
 		http
@@ -64,6 +67,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 				.usernameParameter("username")
 				.passwordParameter("password")
 				.defaultSuccessUrl("/", false)
+//				.successHandler(authSuccessHandler)
 				.failureUrl("/login?error")
 				.loginPage("/login")
 				.loginProcessingUrl("/login")
