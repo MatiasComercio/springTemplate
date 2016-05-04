@@ -3,8 +3,6 @@ package ar.edu.itba.paw.webapp.controllers;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.forms.LoginForm;
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.core.util.StatusPrinter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
@@ -36,11 +32,6 @@ public class UserController {
 			@ModelAttribute("loggedUser") final User loggedUser) {
 		final ModelAndView mav = new ModelAndView("index");
 		us.register("juan", "12345");
-
-//		// assume SLF4J is bound to logback in the current environment
-//		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-//		// print logback's internal status
-//		StatusPrinter.print(lc);
 
 		LOGGER.debug("Logged user is {}", loggedUser);
 		return mav;
