@@ -1,24 +1,27 @@
 package ar.edu.itba.paw.webapp.controllers;
 
+import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.forms.LoginForm;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.core.util.StatusPrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.itba.paw.interfaces.UserService;
-
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 @Controller
 public class UserController {
 
-	private final static String LOGGED_USER_ID = "userId";
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	private UserService us;
@@ -30,12 +33,16 @@ public class UserController {
 
 	@RequestMapping("/")
 	public ModelAndView index(
-			@ModelAttribute("loggedUser") final User loggedUser,
-			final HttpSession session) {
+			@ModelAttribute("loggedUser") final User loggedUser) {
 		final ModelAndView mav = new ModelAndView("index");
 		us.register("juan", "12345");
-//		mav.addObject("user", us.register("juan", "12345"));
-//		mav.addObject("userId", session.getAttribute(LOGGED_USER_ID));
+
+//		// assume SLF4J is bound to logback in the current environment
+//		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+//		// print logback's internal status
+//		StatusPrinter.print(lc);
+
+		LOGGER.debug("Logged user is {}", loggedUser);
 		return mav;
 	}
 
@@ -56,35 +63,6 @@ public class UserController {
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		return us.getByUsername(auth.getName()); // >>> 2.30: antes era getPrincipal y daba excepción.
 	}
-
-//	/* No puedo pedirle parametros del request, pero si cosas generales */
-//	@ModelAttribute("userId")
-//	public Integer loggedUser(final HttpSession sessionId) {
-//		return (Integer) sessionId.getAttribute(LOGGED_USER_ID);
-//	}
-
-
-//	@RequestMapping(value = "/login" , method = {RequestMethod.POST})
-//	public ModelAndView login(@Valid @ModelAttribute("loginForm") final LoginForm loginForm,
-//								final BindingResult errors,
-//								final HttpSession sessionId) {
-//		final User user = us.getByUsername(loginForm.getUsername());
-//
-//		if (errors.hasErrors()) {
-//			/*return new ModelAndView("redirect:/login");*/ /*+++xcheck: not working: ModelAttribute is being completely re-instantiated, not shared */
-//			return login(loginForm);/*This worked*/
-//		}
-//
-//		final ModelAndView mav;
-//		if (user != null && user.getPassword().equals(loginForm.getPassword())) {
-//			sessionId.setAttribute(LOGGED_USER_ID, user.getId());
-//			mav = new ModelAndView("index");
-//			mav.addObject("user", user);
-//		} else {
-//			mav = new ModelAndView("redirect:/login");
-//		}
-//		return mav;
-//	}
 
 	@RequestMapping("/users/{username}")
 	public ModelAndView getUser(@PathVariable final String username) {
